@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Service pour la base de données MySQL
+  db:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Siojjr*$
+      MYSQL_DATABASE: test
+      MYSQL_USER: titi
+      MYSQL_PASSWORD: siojjr*
+
+  # Service pour WordPress
+  wordpress:
+    image: wordpress:latest
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: tata
+      WORDPRESS_DB_USER: toto
+      WORDPRESS_DB_PASSWORD: siojjr
+      WORDPRESS_CONFIG_EXTRA: |
+        define('FS_METHOD', 'direct');
+
+volumes:
+  db_data:

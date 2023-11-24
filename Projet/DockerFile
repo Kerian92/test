@@ -1,0 +1,28 @@
+# Utilisez l'image officielle de WordPress en tant que base
+FROM wordpress:latest
+
+# Copiez le fichier de configuration personnalisé de PHP dans le conteneur
+COPY php.ini /usr/local/etc/php/conf.d/custom.ini
+
+# Exposez le port 80 pour le trafic HTTP
+EXPOSE 80
+
+# Spécifiez l'utilisateur et le groupe à utiliser pour les fichiers du site WordPress
+# (c'est généralement www-data pour les conteneurs WordPress)
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+
+# Définissez le répertoire de travail dans le conteneur
+WORKDIR /var/www/html
+
+# Copiez le contenu de votre site WordPress dans le conteneur
+COPY . .
+
+# Donnez les permissions nécessaires aux fichiers et répertoires
+RUN chown -R www-data:www-data /var/www/html
+
+# Indiquez le point d'entrée pour le conteneur
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+# Commande par défaut pour le conteneur
+CMD ["apache2-foreground"]
+
